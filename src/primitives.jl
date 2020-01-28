@@ -10,8 +10,6 @@ Missing dimensions are replaced with `nothing`
 """
 @inline Base.permutedims(tosort::AbDimTuple, perm::Union{Vector{<:Integer},Tuple{<:Integer,Vararg}}) =
     map(p -> tosort[p], Tuple(perm))
-@inline Base.permutedims(tosort::Union{Vector{<:Integer},Tuple{<:Integer,Vararg}}, perm::AbDimTuple) =
-    tosort
 
 @inline Base.permutedims(tosort::AbDimTuple, order::UnionAllTupleOrVector) =
     permutedims(tosort, Tuple(map(d -> constructorof(d)(), order)))
@@ -114,10 +112,6 @@ the new struct but are useful to give context to plots.
 Called at the array level the returned tuple will also include the
 previous reference dims attached to the array.
 """
-@inline slicedims(A, dims::AbDimTuple) = slicedims(A, dims2indices(A, dims))
-@inline slicedims(dims2slice::AbDimTuple, dims::AbDimTuple) =
-    slicedims(dims2slice, dims2indices(dims2slice, dims))
-@inline slicedims(dims2slice::AbDimTuple, dims::Tuple{}) = ()
 # Results are split as (dims, refdims)
 @inline slicedims(A, I::Tuple) = slicedims(dims(A), refdims(A), I)
 @inline slicedims(dims::Tuple, refdims::Tuple, I::Tuple{}) = dims, refdims
