@@ -48,6 +48,24 @@ permutedims_inner(tosort::Type, order::Type, griddims::Type) = begin
     Expr(:tuple, indexexps...)
 end
 
+Base.permutedims(tosort::AbDimTuple, order::AbDimTuple, griddims) =
+    sortdim(tosort, order)
+
+sortdim(tosort::Tuple, candidates::Tuple, rejected=()) =
+    if basetypeof(tosort[1]) <: basetypeof(order[1])
+        # A match. Use this dim, 
+        tosort[1], sortdim(tail(tosort), (tail(candidates)...), ())
+    else
+        sortdim(tosort, tail(order), (rejected..., candidates[1]))
+    end
+
+# Start on a new dim if we run out of candidates
+sortdim(tosort::Tuple, candidates::Tuple{}, rejected) = 
+    (nothing, sortim(tosort, rejected, ())...) 
+# Return an empty tuple if we run oujt of dims to sort
+sortdim(tosort::Tuple{}, candidates, rejected) = 
+    ()
+
 
 """
 Convert a tuple of AbstractDimension to indices, ranges or Colon.
