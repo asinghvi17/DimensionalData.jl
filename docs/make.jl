@@ -16,7 +16,7 @@ makedocs(; sitename="DimensionalData", authors="Rafael Schouten et al.",
     modules=[DimensionalData],
     checkdocs=:all,
     format=DocumenterVitepress.MarkdownVitepress(
-        repo = "github.com/rafaqz/DimensionalData.jl",
+        repo = "github.com/asinghvi17/DimensionalData.jl",
         devbranch = "main", 
         devurl = "dev", 
     ),
@@ -29,7 +29,7 @@ makedocs(; sitename="DimensionalData", authors="Rafael Schouten et al.",
 # Deploy built documentation.
 # ===========================
 deploydocs(; 
-    repo="github.com/rafaqz/DimensionalData.jl",
+    repo="github.com/asinghvi17/DimensionalData.jl",
     target="build", # this is where Vitepress stores its output
     branch = "gh-pages",
     devbranch = "main",
