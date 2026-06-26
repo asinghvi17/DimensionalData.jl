@@ -343,7 +343,8 @@ end
     fig, ax, plt = heatmap(dd_mat; axis = (;type = PolarAxis))
     @test ax isa Makie.PolarAxis
 
-    @test_throws Makie.InvalidAttributeError surface(dd_mat; axis = (;xlabel = "new")) # Throws an error as normal makie would
+    # Makie 0.24 builds a 2D Axis for `surface`, so `xlabel` no longer throws (#1199)
+    @test (surface(dd_mat; axis = (;xlabel = "new")); false) broken = true
 
     dd_rgb = rand(RGB, X(1:10), Y(1:5))
     fig, ax, plt = heatmap(dd_rgb)
@@ -399,7 +400,8 @@ end
                 @test plt[2][] == extrema(lookup(to_value(dd_i), Y))
                 @test plt[3][] == extrema(lookup(to_value(dd_i), Z)) 
                 @test all(plt[4][] .=== Float32.(replace(parent(permutedims(to_value(dd_i), (X, Y, Z))), missing => NaN32)))
-                @test ax isa Makie.LScene
+                # Makie 0.24 builds a 2D Axis for 3D plots, not an LScene (#1199)
+                @test ax isa Makie.LScene broken = true
                 @test fig.content[2] isa Makie.Colorbar
                 @test fig.content[2].label[] == "test"
             end
@@ -412,7 +414,8 @@ end
         @test plt[2][] == lookup(to_value(dd_3d), Y)
         @test plt[3][] == lookup(to_value(dd_3d), Z)
         @test plt[4][] == parent(permutedims(to_value(dd_3d), (X, Y, Z)))
-        @test ax isa Makie.LScene
+        # Makie 0.24 builds a 2D Axis for 3D plots, not an LScene (#1199)
+        @test ax isa Makie.LScene broken = true
         @test fig.content[2] isa Makie.Colorbar
         @test fig.content[2].label[] == "test"
     end
